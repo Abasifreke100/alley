@@ -1,5 +1,7 @@
 <?php
 
+use Alley\Providers\RouteServiceProvider;
+
 return [
 
     /*
@@ -169,11 +171,13 @@ return [
         /*
          * Application Service Providers...
          */
-        App\Providers\AppServiceProvider::class,
-        App\Providers\AuthServiceProvider::class,
-        // App\Providers\BroadcastServiceProvider::class,
-        App\Providers\EventServiceProvider::class,
-        App\Providers\RouteServiceProvider::class,
+        Alley\Providers\AppServiceProvider::class,
+        Alley\Providers\AuthServiceProvider::class,
+        // Alley\Providers\BroadcastServiceProvider::class,
+        Alley\Providers\EventServiceProvider::class,
+        Alley\Providers\RouteServiceProvider::class,
+        Alley\Providers\DatabaseServiceProvider::class,
+
 
     ],
 
