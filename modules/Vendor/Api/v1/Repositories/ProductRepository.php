@@ -45,6 +45,7 @@ class ProductRepository extends BaseRepository
         return false;
     }
 
+
     public function update(array $request,$id)
     {
         $data = (object) $request;

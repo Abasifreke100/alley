@@ -22,7 +22,9 @@ class CreateProductsTable extends Migration
             $table->string('location');
             $table->string('monthly_price');
             $table->text('description');
+            $table->string('vendor_id');
             $table->timestamps();
+
         });
     }
 

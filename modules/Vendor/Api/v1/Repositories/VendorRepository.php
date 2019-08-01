@@ -2,6 +2,7 @@
 namespace Alley\Modules\Vendor\Api\v1\Repositories;
 
 
+use Alley\Modules\Vendor\Models\Product;
 use Illuminate\Support\Facades\Hash;
 use Alley\Modules\Vendor\Api\v1\Transformers\VendorTransformer;
 use Alley\Modules\Vendor\Models\Vendor;
@@ -20,11 +21,12 @@ class VendorRepository extends BaseRepository
     public function index()
     {
         return Vendor::all();
+
     }
 
     public function getById($id)
     {
-        $vendor = $this->vendor->where('id',$id);
+        $vendor = $this->vendor->where('id',$id)->firstOrFail();
         return $vendor;
     }
 

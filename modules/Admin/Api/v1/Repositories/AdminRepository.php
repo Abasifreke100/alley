@@ -64,7 +64,7 @@ class AdminRepository extends BaseRepository
     {
         $data = (object) $request;
 
-        $admin = $this->admin->findOrFail($id);
+        $admin = $this->admin->where('id',$id);
          $admin->update([
              'first_name'=>$data->first_name,
              'last_name' =>$data->last_name,
