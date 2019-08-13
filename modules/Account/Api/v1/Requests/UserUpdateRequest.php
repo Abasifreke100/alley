@@ -27,13 +27,9 @@ class UserUpdateRequest extends FormRequest
             "first_name"         =>'required',
             "last_name"          =>'required',
             "address"            =>'required',
-            "email"              =>'required|unique:users',
-            "phone_number"       =>'required',
-            'password'           =>'required|min:8',
-            'country'            =>'required',
-            'state'              =>'required',
-            'city'               =>'required',
-            'photo'              =>'required',
+            "email"              =>'required',
+            "phone"              =>'required',
+
         ];
     }
 }

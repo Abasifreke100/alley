@@ -27,7 +27,7 @@ class VendorUpdateRequest extends FormRequest
 
             "vendor_name"        =>'required',
             "location"           =>'required',
-            "email"              =>'required|unique:vendors',
+            "email"              =>'required',
             "phone_number"       =>'required',
             'password'           =>'required|min:8',
         ];

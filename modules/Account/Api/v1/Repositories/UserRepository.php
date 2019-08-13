@@ -36,17 +36,12 @@ class UserRepository extends BaseRepository
             "first_name"        => $data->first_name,
             "last_name"         => $data->last_name,
             "email"             => $data->email,
-            "phone_number"      => $data->phone_number,
-            "address"           => $data->address,
-            "country"           => $data->country,
-            "state"             => $data->state,
-            "city"              => $data->city,
-            "photo"             => $data->photo,
-            "password"          => Hash::make($data->password)
+            "phone"             => $data->phone,
+            "gender"            => $data->gender,
+            "location"           => $data->location,
         ]);
 
         if ($user) {
-//                $this->sendWelcomeEmail($user);
                 return $this->login($userData);
             }
             return false;
@@ -70,18 +65,15 @@ class UserRepository extends BaseRepository
     {
         $data = (object)$request;
 
-        $user = $this->user->findOrFail($id);
+        $user = $this->user->where('id',$id);
         $user->update([
             'first_name'    => $data->first_name,
             'last_name'     => $data->last_name,
             'email'         => $data->email,
-            'phone_number'  => $data->phone_number,
-            'address'       => $data->address,
-            'password'      => $data->password,
-            'city'          => $data->city,
-            'state'         => $data->state,
-            'country'       => $data->country,
-            'photo'         => $data->photo,
+            'phone'         => $data->phone,
+            'gender'        =>$data->gender,
+            'location'      => $data->location,
+
         ]);
 
         if ($user)

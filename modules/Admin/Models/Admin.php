@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Admin extends Model
 {
     protected $fillable = [
-        'id','first_name','last_name','phone_number','email','password',
+        'id','name','phone','email','password',
     ];
 
     public $incrementing = false;

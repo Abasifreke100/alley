@@ -16,7 +16,7 @@ class OrderTransformer extends TransformerAbstract
     {
         return [
 
-            'order_id'     =>$order->order_id,
+            'id'           =>$order->id,
             'user_id'      =>$order->user_id,
             'product_id'   =>$order->product_id,
             'status'       =>$order->status,

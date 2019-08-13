@@ -26,15 +26,9 @@ class UserRegisterRequest extends FormRequest
         return [
             "first_name" =>'required|alpha|max:255',
             "last_name" =>'required|alpha|max:255',
-            "address" =>'required|max:255',
+            "location" =>'required|max:255',
             "email"=>'required|string|email|max:255|unique:users',
-            "phone_number"=>'required|max:15',
-            'password'=>'required|string|min:8|',
-            'country' =>'required',
-            'state'  =>'required',
-            'city'   =>'required',
-            'photo'  =>'required',
-
+            "phone"=>'required|max:15',
         ];
     }
 }
