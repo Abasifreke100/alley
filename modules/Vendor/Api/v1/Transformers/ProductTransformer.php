@@ -1,5 +1,4 @@
 <?php
-
 namespace Alley\Modules\Vendor\Api\v1\Transformers;
 
 use Alley\Modules\Vendor\Models\Product;
@@ -16,12 +15,28 @@ class ProductTransformer extends TransformerAbstract
     public function transform(Product $product)
     {
         return [
-            'id'            =>$product->id,
-            'names'         =>$product->names,
-            'category'      =>$product->category,
-            'location'      =>$product->location,
-            'monthly_price' =>$product->moonthly_price,
-            'description'   =>$product->description,
+            'id'         =>$product->id,
+            'description'=>$product->description,
+            'category'   =>$product->category,
+            'street'     =>$product->street,
+            'city'       =>$product->city,
+            'state'      =>$product->state,
+            'feature'    =>$product->feature,
+            'price'      =>$product->price,
+            'filename'   =>$this->imageUploader($product),
+
         ];
+    }
+
+    private function imageUploader($product)
+    {
+        $images = $product->with('productImage')->first();
+
+        foreach ($images->productImage as $image)
+        {
+//            dd($image->filename);
+            return $image->filename;
+        }
+
     }
 }

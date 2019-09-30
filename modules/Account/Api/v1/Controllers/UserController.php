@@ -1,19 +1,19 @@
 <?php
-
 namespace Alley\Modules\Account\Api\v1\Controllers;
 
 use Alley\Modules\Account\Api\v1\Repositories\UserRepository;
-use Alley\Modules\Account\Api\v1\Requests\UserRegisterRequest;
-use Alley\Modules\Account\Api\v1\Requests\UserUpdateRequest;
-use Alley\Modules\Account\Api\v1\Requests\UserLoginRequest;
+use Alley\Modules\Account\Api\v1\Requests\AdminLoginRequest;
+use Alley\Modules\Account\Api\v1\Requests\VendorRegistrationRequest;
+use Alley\Modules\Account\Api\v1\Requests\VendorUpdateRequest;
+use Alley\Modules\Account\Api\v1\Requests\VendorLoginRequest;
 use Alley\Modules\Account\Api\v1\Transformers\UserTransformer;
 use Alley\Modules\BaseController;
+use Illuminate\Http\Request;
+
 
 class UserController extends BaseController
 {
-
     private $userRepository;
-
     private $userTransformer;
 
     public function __construct(UserRepository $userRepository,UserTransformer $userTransformer)
@@ -22,49 +22,50 @@ class UserController extends BaseController
         $this->userTransformer=$userTransformer;
     }
 
-    public function index()
+    public function registerVendor(VendorRegistrationRequest $request)
     {
-        $user = $this->userRepository->index();
-        return $this->success($user, $this->userTransformer);
-    }
-
-    public function getById($id)
-    {
-        $user = $this->userRepository->getById($id);
-        return $this->success($user, $this->userTransformer);
-    }
-
-
-    public function register(UserRegisterRequest $request)
-    {
-        $user = $this->userRepository->register($request->all());
+        $user = $this->userRepository->registerVendor($request->all());
 
         if ($user){
             return $user;
         }
-        return $this->error('UserRegistration Fail !!');
+        return Response()->json('Unable To RegisterVendor!');
+    }
+
+    public function vendorLogin(VendorLoginRequest $request)
+    {
+        return $this->userRepository->vendorLogin($request->all());
+    }
+
+    public function adminLogin(AdminLoginRequest $request)
+    {
+        return $this->userRepository->adminLogin($request->all());
+    }
+
+    public function getAllVendor()
+    {
+        $user = $this->userRepository->getAllVendor();
+        return $this->success($user,$this->userTransformer);
+    }
+
+    public function getVendorById($id)
+    {
+        $user = $this->userRepository->getVendorById($id);
+        return $this->success($user,$this->userTransformer);
     }
 
 
-    public function login(UserLoginRequest $request)
+    public function updateVendor(VendorUpdateRequest $request, $id)
     {
-        return $this->userRepository->login($request->all());
-    }
-
-
-    public function update(UserUpdateRequest $request,$id)
-    {
-        $user = $this->userRepository->update($request->all(),$id);
-
+        $user =  $this->userRepository->updateVendor($request->all(),$id);
         if ($user){
             return $user;
         }
-        return $this->error('UserUpdate Fail !!');
+        return response()->json('Unable To Update User');
     }
 
-    public function delete($id)
+    public function deleteVendor($id)
     {
-        return $this->userRepository->delete($id);
+        return $this->userRepository->deleteVendor($id);
     }
-
 }

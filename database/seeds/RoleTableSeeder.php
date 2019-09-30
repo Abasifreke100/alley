@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
-use Alley\Modules\Admin\Models\Role;
+use Alley\Modules\Account\Models\Role;
 use Illuminate\Support\Carbon;
 use Alley\Modules\BaseRepository;
 
@@ -26,11 +26,9 @@ class RoleTableSeeder extends Seeder
         $date = Carbon::now();
 
         Role::insert([
-            ['id'=> $this->baseRepository->generateUuid(), 'name'=> 'admin', 'display_name'=> 'admin', 'created_at'=>$date, 'updated_at'=>$date],
+            ['id'=> $this->baseRepository->generateUuid(), 'role'=> 'admin', 'display_name'=> 'admin', 'created_at'=>$date, 'updated_at'=>$date],
 
-            ['id'=> $this->baseRepository->generateUuid(), 'name'=> 'vendor', 'display_name'=> 'vendor', 'created_at'=>$date, 'updated_at'=>$date],
-
-            ['id'=> $this->baseRepository->generateUuid(), 'name'=> 'user', 'display_name'=> 'user', 'created_at'=>$date, 'updated_at'=>$date],
+            ['id'=> $this->baseRepository->generateUuid(), 'role'=> 'vendor', 'display_name'=> 'vendor', 'created_at'=>$date, 'updated_at'=>$date],
         ]);
     }
 }

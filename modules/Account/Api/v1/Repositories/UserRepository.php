@@ -1,10 +1,12 @@
 <?php
 namespace Alley\Modules\Account\Api\v1\Repositories;
 
-use Illuminate\Support\Facades\Hash;
-use Alley\Modules\Account\Api\v1\Transformers\UserTransformer;
+use Alley\Events\NewRegisteredVendor;
 use Alley\Modules\Account\Models\User;
+use Alley\Modules\Account\Models\Role;
+use Alley\Modules\Account\Api\v1\Transformers\UserTransformer;
 use Alley\Modules\BaseRepository;
+use Illuminate\Support\Facades\Hash;
 
 class UserRepository extends BaseRepository
 {
@@ -12,81 +14,98 @@ class UserRepository extends BaseRepository
 
     public function __construct(User $user)
     {
-        $this->user=$user;
-
+        $this->user = $user;
     }
 
-    public function index()
-    {
-        return User::all();
-    }
-
-    public function getById($id)
-    {
-        $user = $this->user->findOrFail($id);
-        return $user;
-    }
-
-    public function register(array $userData)
+    public function registerVendor(array $userData)
     {
         $data = (object)$userData;
 
+        $role = Role::where('role', 'vendor')->first();
         $user = User::create([
-            "id"                => $this->generateUuid(),
-            "first_name"        => $data->first_name,
-            "last_name"         => $data->last_name,
-            "email"             => $data->email,
-            "phone"             => $data->phone,
-            "gender"            => $data->gender,
-            "location"           => $data->location,
+            'id'                => $this->generateUuid(),
+            'agency_name'       => $data->agency_name,
+            'agency_address'    => $data->agency_address,
+            'first_name'        => $data->first_name,
+            'last_name'         => $data->last_name,
+            'email'             => $data->email,
+            'phone'             => $data->phone,
+            'role'              => $role->role,
+            'role_id'           => $role->id,
+            'password'          => Hash::make($data->password)
         ]);
-
         if ($user) {
-                return $this->login($userData);
-            }
-            return false;
-
+            event(new NewRegisteredVendor($user));
+            return $this->vendorLogin($userData);//($userData, $role);
+        }
+        return false;
     }
 
-    public function login(array $data){
-        $credentials = collect($data)->only(['email','password']);
-        if($token = auth()->attempt($credentials->toArray())){
+
+    public function vendorLogin(array $data)
+    {
+        $credentials = collect($data)->only(['email', 'password']);
+        if ($token = auth()->attempt($credentials->toArray())) {
             $user = auth()->user();
             $user = fractal($user, new UserTransformer())->serializeWith(new \Spatie\Fractalistic\ArraySerializer());
-            return response()->json(["status"=>"success","token"=>$token,"user"=>$user]);
+            return response()->json(["status" => "success", "token" => $token, "user" => $user]);
         }
+        return response()->json(["status" => "error", "message" => "Invalid email or password"]);
+    }
 
-        return response()->json(["status"=>"error","message"=>"Invalid email or password"]);
-
+    public function adminLogin(array $data)
+    {
+        $credentials = collect($data)->only(['email', 'password']);
+        if ($token = auth()->attempt($credentials->toArray())) {
+            $admin = auth()->user();
+            $admin = fractal($admin, new UserTransformer())->serializeWith(new \Spatie\Fractalistic\ArraySerializer());
+            return response()->json(["status" => "success", "token" => $token, "user" => $admin]);
+        }
+        return response()->json(["status" => "error", "message" => "Invalid email or password"]);
     }
 
 
-    public function update(array $request,$id)
+    public function getAllVendor()
+    {
+        $user = User::whereRole('vendor')->get();
+        return $user;
+    }
+
+
+    public function getVendorById($id)
+    {
+        $user = $this->user->where('id',$id)->first();
+        return $user;
+    }
+
+
+    public function updateVendor(array $request, $id)
     {
         $data = (object)$request;
 
-        $user = $this->user->where('id',$id);
+        $role = Role::where('role', 'vendor')->first();
+        $user = User::where('id', $id)->first();
         $user->update([
-            'first_name'    => $data->first_name,
-            'last_name'     => $data->last_name,
-            'email'         => $data->email,
-            'phone'         => $data->phone,
-            'gender'        =>$data->gender,
-            'location'      => $data->location,
-
+            'agency_name'    => $data->agency_name,
+            'agency_address' => $data->agency_address,
+            'first_name'     => $data->first_name,
+            'last_name'      => $data->last_name,
+            'email'          => $data->email,
+            'phone'          => $data->phone,
         ]);
 
-        if ($user)
-            return $request;
-        return Response()->json(['status' => 200, 'message' => 'User Successfully Updated !!']);
+        if ($role && $user)
+            return $user;
+        return response()->json(['status'=>'success'], ['message' => 'Vendor Data Successfully Updated!!']);
+
     }
 
-    public function delete($id)
+    public function deleteVendor($id)
     {
-        $user = $this->user->findOrFail($id);
-        $user->delete();
-        return response()->json(['status' => 200, 'message' => 'User Successfully Deleted !!']);
+        $user= $this->user->where('id', $id)->delete();
+        if ($user){
+            return "Vendor Deleted Successfully!!";
+        }
     }
-
 
 }

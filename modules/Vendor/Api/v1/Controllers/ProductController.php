@@ -21,40 +21,41 @@ class ProductController extends BaseController
         $this->productTransformer=$productTransformer;
     }
 
-    public function index()
+    public function getAllProduct()
     {
-        $product = $this->productRepository->index();
+        $product = $this->productRepository->getAllProduct();
         return $this->success($product,$this->productTransformer);
     }
 
-    public function getById($id)
+    public function getProductById($id)
     {
-        $product = $this->productRepository->getById($id);
+        $product = $this->productRepository->getProductById($id);
         return $this->success($product,$this->productTransformer);
     }
 
-    public function upload(UploadProductRequest $request)
+    public function createProduct(UploadProductRequest $request)
     {
-        $product = $this->productRepository->upload($request->all());
-
+        $product = $this->productRepository->createProduct($request->all());
         if ($product){
-            return $product;
+            return $this->transform($product, $this->productTransformer);
         }
-        return $this->error('Product Upload Fail !!');
+
     }
 
-    public function update(UpdateProductRequest $request,$id)
+
+    public function updateProduct(UpdateProductRequest $request,$id)
     {
-        $product = $this->productRepository->update($request->all(),$id);
+        $product = $this->productRepository->updateProduct($request->all(),$id);
         if ($product){
             return $product;
         }
         return $this->error('Product Update Fail');
     }
 
-    public function delete($id)
+
+    public function deleteProduct($id)
     {
-        return $this->productRepository->delete($id);
+        return $this->productRepository->deleteProduct($id);
     }
 }
 

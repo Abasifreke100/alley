@@ -18,19 +18,18 @@ class CreateUsersTable extends Migration
             $table->primary('id');
             $table->string('first_name');
             $table->string('last_name');
-            $table->string('address');
-            $table->string('phone_number');
-            $table->string('country');
-            $table->string('state');
-            $table->string('city');
-            $table->string('photo');
             $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->string('phone');
+            $table->string('role');
+            $table->string('role_id');
+            $table->string('agency_name')->nullable();
+            $table->string('agency_address')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });
     }
+
 
     /**
      * Reverse the migrations.
