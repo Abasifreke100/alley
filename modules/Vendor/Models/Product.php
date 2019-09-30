@@ -1,27 +1,21 @@
 <?php
 
 namespace Alley\Modules\Vendor\Models;
-
-use Alley\Modules\Account\Models\Order;
 use Illuminate\Database\Eloquent\Model;
 
 class Product extends Model
 {
     protected $fillable = [
-        'id','vendor_id','images','names','category','description','location','monthly_price',
+        'id','vendor_id','description','role','category','street','city','state','feature','price',
     ];
 
 
     public $incrementing = false;
 
-    public function vendor()
-    {
-        return $this->belongsTo(Vendor::class);
-    }
 
-    public function order()
+    public function productImage()
     {
-        return $this->hasMany(Order::class);
+        return $this->hasMany(ProductImage::class);
     }
 }
 

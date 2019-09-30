@@ -2,13 +2,14 @@
 
 namespace Alley\Modules\Account\Models;
 
+use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
-use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable implements JWTSubject
 {
     use Notifiable;
+    protected $table = 'users';
 
     /**
      * The attributes that are mass assignable.
@@ -16,7 +17,7 @@ class User extends Authenticatable implements JWTSubject
      * @var array
      */
     protected $fillable = [
-        'id','first_name','last_name','email','phone_number','address','password','country','state','city','photo',
+        'id','first_name','last_name','email','phone','password','role','role_id','agency_name','agency_address',
     ];
 
     /**
@@ -61,9 +62,8 @@ class User extends Authenticatable implements JWTSubject
         return [];
     }
 
-    public function order()
-    {
-        return $this->hasMany(Order::class);
-    }
+
+
+
 
 }

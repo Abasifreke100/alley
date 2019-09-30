@@ -24,12 +24,14 @@ class UploadProductRequest extends FormRequest
     public function rules()
     {
         return [
-            "name" =>'required|alpha|max:255',
-            "images" =>'required',
-            "category" =>'required|alpha|max:255',
-            "location" =>'required|alpha|max:255',
-            "monthly_price" =>'required|alpha|max:255',
-            "description" =>'required|max:255',
+            "description" =>'required|string',
+            "category"    =>'required|string',
+            "street"      =>'required|string',
+            "city"        =>'required|string',
+            "state"       =>'required|string',
+            "feature"     =>'required|string',
+            "filename"    => 'required|array',
+
         ];
     }
 }
